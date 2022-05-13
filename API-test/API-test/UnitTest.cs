@@ -2,12 +2,15 @@ using API_test.RequestSpecs;
 using API_test.Helpers;
 using NUnit.Framework;
 using System.Net;
+using API_test.ApiResponseModels;
+using System.Collections.Generic;
 
 namespace API_test
 {
     public class Tests
     {
         private RestHelper restHelper;
+        private const int defaultPageSize = 15;
 
         [SetUp]
         public void Setup()
@@ -20,6 +23,14 @@ namespace API_test
         {
             var response = restHelper.GetQuery(RequestSpec.Query);
             Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.OK), "Service is not available");
+        }
+
+        [Test]
+        public void DefaultPageSizeIsCorrect()
+        {
+            var response = restHelper.GetQuery(RequestSpec.Query);
+            var itemsList = response.Content.SelectToken("items").ToObject<List<ItemDto>>();
+            Assert.AreEqual(itemsList.Count, defaultPageSize, "Default page size is not as expected");
         }
 
         [Test]
