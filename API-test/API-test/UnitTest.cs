@@ -30,7 +30,17 @@ namespace API_test
         {
             var response = restHelper.GetQuery(RequestSpec.Query);
             var itemsList = response.Content.SelectToken("items").ToObject<List<ItemDto>>();
-            Assert.AreEqual(itemsList.Count, defaultPageSize, "Default page size is not as expected");
+            Assert.AreEqual(defaultPageSize, itemsList.Count, "Default page size is not as expected");
+        }
+
+        [TestCase(5)]
+        [TestCase(10)]
+        [TestCase(15)]
+        public void AllPageSizesWorkAsExpected(int pageSize)
+        {
+            var response = restHelper.GetQuery(RequestSpec.Query, RequestSpec.PageSizeParameter, pageSize.ToString());
+            var itemsList = response.Content.SelectToken("items").ToObject<List<ItemDto>>();
+            Assert.AreEqual(pageSize, itemsList.Count, "Returned page size is not as expected");
         }
 
         [Test]

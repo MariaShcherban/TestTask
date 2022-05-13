@@ -30,6 +30,13 @@ namespace API_test.Helpers
             return ParseResponse(endpoint.Execute(request));
         }
 
+        public Response GetQuery(string query, string parameter, string value)
+        {
+            var request = new RestRequest(query, Method.GET);
+            request.AddQueryParameter(parameter, value);
+            return ParseResponse(endpoint.Execute(request));
+        }
+
         public Response PostQuery(string query)
         {
             var request = new RestRequest(query, Method.POST);

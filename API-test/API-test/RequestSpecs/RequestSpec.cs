@@ -13,6 +13,10 @@ namespace API_test.RequestSpecs
 
         public static string Query => endpoint;
         public static string BackendUrl => url;
+        public static string SearchParameter => searchParameter;
+        public static string CountryCodeParameter => countryCodeParameter;
+        public static string PageNumberParameter => pageNumberParameter;
+        public static string PageSizeParameter => pageSizeParameter;
 
         public static Dictionary<string, string> Params(string region, string countryCode, string pageNumber, string pageSize)
         {
