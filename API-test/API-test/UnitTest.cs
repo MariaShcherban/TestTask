@@ -1,4 +1,4 @@
-using API_test.RequestSpecs;
+﻿using API_test.RequestSpecs;
 using API_test.Helpers;
 using NUnit.Framework;
 using System.Net;
@@ -41,6 +41,19 @@ namespace API_test
             var response = restHelper.GetQuery(RequestSpec.Query, RequestSpec.PageSizeParameter, pageSize.ToString());
             var itemsList = response.Content.SelectToken("items").ToObject<List<ItemDto>>();
             Assert.AreEqual(pageSize, itemsList.Count, "Returned page size is not as expected");
+        }
+
+        [Test]
+        public void IncorrectPageSizeParameterShouldBeHandled()
+        {
+            string expectedErrorMessage = "Параметр 'page_size' должен быть целым числом";
+            var response = restHelper.GetQuery(RequestSpec.Query, RequestSpec.PageSizeParameter, "r");
+            var error = response.Content.SelectToken("error").ToObject<ErrorDto>();
+            Assert.Multiple(() =>
+            {
+                Assert.AreEqual(HttpStatusCode.OK, response.StatusCode, "Got unexpected status code");
+                Assert.AreEqual(expectedErrorMessage.Normalize(), error.Message.Normalize(), "Got unexpected error message");
+            });
         }
 
         [Test]
