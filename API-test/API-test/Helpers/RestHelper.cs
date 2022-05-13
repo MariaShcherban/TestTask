@@ -44,10 +44,8 @@ namespace API_test.Helpers
 
         public Response ParseResponse (IRestResponse response)
         {
-            JToken content = null;
             try
             {
-                content = JToken.Parse(response.Content);
                 return new Response()
                 {
                     StatusCode = response.StatusCode,
@@ -56,7 +54,7 @@ namespace API_test.Helpers
                     ErrorMessage = response.ErrorMessage
                 };
             }
-            catch (JsonReaderException ex)
+            catch (JsonReaderException)
             {
                 return new Response()
                 {
