@@ -23,14 +23,14 @@ namespace API_test
         }
 
         [Test]
-        public void PostRequestIsProcessedCorrectly()
+        public void PostRequestShouldBeProcessedCorrectly()
         {
             var response = restHelper.PostQuery(RequestSpec.Query);
             Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.MethodNotAllowed), "POST query returned unexpected status code");
         }
 
         [Test]
-        public void PutRequestIsProcessedCorrectly()
+        public void PutRequestShouldBeProcessedCorrectly()
         {
             var response = restHelper.PutQuery(RequestSpec.Query);
             Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.MethodNotAllowed), "PUT query returned unexpected status code");

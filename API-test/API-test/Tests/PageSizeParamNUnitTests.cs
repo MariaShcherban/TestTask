@@ -19,7 +19,7 @@ namespace API_test.Tests
         }
 
         [Test]
-        public void DefaultPageSizeIsCorrect()
+        public void DefaultPageSizeShouldBeCorrect()
         {
             var response = restHelper.GetQuery(RequestSpec.Query);
             var itemsList = response.Content.SelectToken("items").ToObject<List<ItemDto>>();
@@ -29,7 +29,7 @@ namespace API_test.Tests
         [TestCase(5)]
         [TestCase(10)]
         [TestCase(15)]
-        public void AllPageSizesWorkAsExpected(int pageSize)
+        public void AllPageSizesShouldWorkAsExpected(int pageSize)
         {
             var response = restHelper.GetQuery(RequestSpec.Query, RequestSpec.PageSizeParameter, pageSize.ToString());
             var itemsList = response.Content.SelectToken("items").ToObject<List<ItemDto>>();
