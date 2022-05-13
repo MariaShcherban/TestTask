@@ -5,9 +5,9 @@ using System.Net;
 using API_test.ApiResponseModels;
 using System.Collections.Generic;
 
-namespace API_test
+namespace API_test.Tests
 {
-    public class Tests
+    public class PageSizeParamNUnitTests
     {
         private RestHelper restHelper;
         private const int defaultPageSize = 15;
@@ -16,13 +16,6 @@ namespace API_test
         public void Setup()
         {
             restHelper = new RestHelper(RequestSpec.BackendUrl);
-        }
-
-        [Test]
-        public void ServiceIsAvailable()
-        {
-            var response = restHelper.GetQuery(RequestSpec.Query);
-            Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.OK), "Service is not available");
         }
 
         [Test]
@@ -57,7 +50,7 @@ namespace API_test
         }
 
         [Test]
-        public void IncorrectSizeParameterShouldBeHandled()
+        public void IncorrectPageSizeParameterShouldBeHandled()
         {
             string expectedErrorMessage = "Параметр 'page_size' может быть одним из следующих значений: 5, 10, 15";
             var response = restHelper.GetQuery(RequestSpec.Query, RequestSpec.PageSizeParameter, "4");
@@ -67,20 +60,6 @@ namespace API_test
                 Assert.AreEqual(HttpStatusCode.OK, response.StatusCode, "Got unexpected status code");
                 Assert.AreEqual(expectedErrorMessage.Normalize(), error.Message.Normalize(), "Got unexpected error message");
             });
-        }
-
-        [Test]
-        public void PostRequestIsProcessedCorrectly()
-        {
-            var response = restHelper.PostQuery(RequestSpec.Query);
-            Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.MethodNotAllowed), "POST query is expected to return 405 'Method Not allowed' got '" + response.StatusCode + "' instead");
-        }
-
-        [Test]
-        public void PutRequestIsProcessedCorrectly()
-        {
-            var response = restHelper.PutQuery(RequestSpec.Query);
-            Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.MethodNotAllowed), "PUT query is expected to return 405 'Method Not allowed' got '" + response.StatusCode + "' instead");
         }
     }
 }
