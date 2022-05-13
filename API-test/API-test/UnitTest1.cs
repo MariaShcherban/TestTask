@@ -21,5 +21,19 @@ namespace API_test
             var response = restHelper.GetQuery(RequestSpec.Query);
             Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.OK), "Service is not available");
         }
+
+        [Test]
+        public void PostRequestIsProcessedCorrectly()
+        {
+            var response = restHelper.PostQuery(RequestSpec.Query);
+            Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.MethodNotAllowed), "POST query is expected to return 405 'Method Not allowed'");
+        }
+
+        [Test]
+        public void PutRequestIsProcessedCorrectly()
+        {
+            var response = restHelper.PutQuery(RequestSpec.Query);
+            Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.MethodNotAllowed), "PUT query is expected to return 405 'Method Not allowed'");
+        }
     }
 }
