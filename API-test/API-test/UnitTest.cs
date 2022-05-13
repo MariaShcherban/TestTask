@@ -44,10 +44,23 @@ namespace API_test
         }
 
         [Test]
-        public void IncorrectPageSizeParameterShouldBeHandled()
+        public void WrongTypeOfPageSizeParameterShouldBeHandled()
         {
             string expectedErrorMessage = "Параметр 'page_size' должен быть целым числом";
             var response = restHelper.GetQuery(RequestSpec.Query, RequestSpec.PageSizeParameter, "r");
+            var error = response.Content.SelectToken("error").ToObject<ErrorDto>();
+            Assert.Multiple(() =>
+            {
+                Assert.AreEqual(HttpStatusCode.OK, response.StatusCode, "Got unexpected status code");
+                Assert.AreEqual(expectedErrorMessage.Normalize(), error.Message.Normalize(), "Got unexpected error message");
+            });
+        }
+
+        [Test]
+        public void IncorrectSizeParameterShouldBeHandled()
+        {
+            string expectedErrorMessage = "Параметр 'page_size' может быть одним из следующих значений: 5, 10, 15";
+            var response = restHelper.GetQuery(RequestSpec.Query, RequestSpec.PageSizeParameter, "4");
             var error = response.Content.SelectToken("error").ToObject<ErrorDto>();
             Assert.Multiple(() =>
             {
