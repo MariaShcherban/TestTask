@@ -10,7 +10,6 @@ namespace API_test.Tests
     public class PageSizeParamNUnitTests
     {
         private RestHelper restHelper;
-        private const int defaultPageSize = 15;
 
         [SetUp]
         public void Setup()
@@ -21,9 +20,10 @@ namespace API_test.Tests
         [Test]
         public void DefaultPageSizeShouldBeCorrect()
         {
+            const int defaultPageSize = 15;
             var response = restHelper.GetQuery(RequestSpec.Query);
             var itemsList = response.Content.SelectToken("items").ToObject<List<ItemDto>>();
-            Assert.AreEqual(defaultPageSize, itemsList.Count, "Default page size is not as expected");
+            Assert.AreEqual(defaultPageSize, itemsList.Count, "Got unexpected default page size");
         }
 
         [TestCase(5)]
@@ -33,13 +33,18 @@ namespace API_test.Tests
         {
             var response = restHelper.GetQuery(RequestSpec.Query, RequestSpec.PageSizeParameter, pageSize.ToString());
             var itemsList = response.Content.SelectToken("items").ToObject<List<ItemDto>>();
-            Assert.AreEqual(pageSize, itemsList.Count, "Returned page size is not as expected");
+            Assert.Multiple(() =>
+            {
+                Assert.AreEqual(HttpStatusCode.OK, response.StatusCode, "Got unexpected status code");
+                Assert.AreEqual(pageSize, itemsList.Count, "Got unexpected page size");
+            });
+
         }
 
         [Test]
         public void WrongTypeOfPageSizeParameterShouldBeHandled()
         {
-            string expectedErrorMessage = "Параметр 'page_size' должен быть целым числом";
+            const string expectedErrorMessage = "Параметр 'page_size' должен быть целым числом";
             var response = restHelper.GetQuery(RequestSpec.Query, RequestSpec.PageSizeParameter, "r");
             var error = response.Content.SelectToken("error").ToObject<ErrorDto>();
             Assert.Multiple(() =>
@@ -52,8 +57,9 @@ namespace API_test.Tests
         [Test]
         public void IncorrectPageSizeParameterShouldBeHandled()
         {
-            string expectedErrorMessage = "Параметр 'page_size' может быть одним из следующих значений: 5, 10, 15";
-            var response = restHelper.GetQuery(RequestSpec.Query, RequestSpec.PageSizeParameter, "4");
+            const string expectedErrorMessage = "Параметр 'page_size' может быть одним из следующих значений: 5, 10, 15";
+            const string invalidPageSize = "4";
+            var response = restHelper.GetQuery(RequestSpec.Query, RequestSpec.PageSizeParameter, invalidPageSize);
             var error = response.Content.SelectToken("error").ToObject<ErrorDto>();
             Assert.Multiple(() =>
             {
