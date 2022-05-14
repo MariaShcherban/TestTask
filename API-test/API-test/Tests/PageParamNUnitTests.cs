@@ -56,5 +56,16 @@ namespace API_test.Tests
             var error = response.Content.SelectToken("error").ToObject<ErrorDto>();
             Assert.AreEqual(expectedErrorMessage.Normalize(), error.Message.Normalize(), "Got unexpected error message");
         }
+
+        [Test]
+        public void CharPageSizeShouldBeHandledCorrectly()
+        {
+            const string charPageNumber = "w";
+            const string expectedErrorMessage = "Параметр 'page' длжен быть целым числом";
+            var response = restHelper.GetQuery(RequestSpec.Query, RequestSpec.PageNumberParameter, charPageNumber);
+            Assert.AreEqual(HttpStatusCode.OK, response.StatusCode, "Got unexpected status code");
+            var error = response.Content.SelectToken("error").ToObject<ErrorDto>();
+            Assert.AreEqual(expectedErrorMessage.Normalize(), error.Message.Normalize(), "Got unexpected error message");
+        }
     }
 }
