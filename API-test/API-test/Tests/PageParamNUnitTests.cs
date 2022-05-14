@@ -32,7 +32,7 @@ namespace API_test.Tests
             ResponseDataRetriever dataRetriever = new ResponseDataRetriever();
             int expectedNumberOfItems = dataRetriever.GetExpectedlNumberOfItems(restHelper);
             int retrievedNumberOfItems = dataRetriever.GetAllUniqueItems(restHelper).Count;
-            Assert.AreEqual(expectedNumberOfItems, retrievedNumberOfItems, "Got unexpected number of all items");
+            Assert.AreEqual(expectedNumberOfItems, retrievedNumberOfItems, "Got unexpected total number of items");
         }
 
         [Test]
