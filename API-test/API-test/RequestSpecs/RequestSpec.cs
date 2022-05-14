@@ -29,11 +29,12 @@ namespace API_test.RequestSpecs
             };
         }
 
-        public static Dictionary<string, string> RegionParam(string region)
+        public static Dictionary<string, string> PageSizeNumberParam(string pageNumber, string pageSize)
         {
             return new Dictionary<string, string>()
             {
-                { searchParameter, region}
+                { pageNumberParameter, pageNumber },
+                { pageSizeParameter, pageSize }
             };
         }
     }
