@@ -38,5 +38,28 @@ namespace API_test.Helpers
             }
             return items;
         }
+
+        public List<ItemDto> GetFilteredItemsByCountryCode(RestHelper restHelper, string countryCode)
+        {
+            var response = restHelper.GetQuery(RequestSpec.Query, RequestSpec.CountryCodeParameter, countryCode);
+            List<ItemDto> items = response.Content.SelectToken("items").ToObject<List<ItemDto>>();
+
+            List<ItemDto> nextPageItems;
+            int page = 2;
+            while (true)
+            {
+                response = restHelper.GetQuery(RequestSpec.Query, RequestSpec.CountryCodePageNumberParam(countryCode, page.ToString()));
+                nextPageItems = response.Content.SelectToken("items").ToObject<List<ItemDto>>();
+                if (nextPageItems.Count != 0)
+                {
+                    nextPageItems.RemoveAt(0);
+                    items.AddRange(nextPageItems);
+                    page++;
+                }
+                else
+                    break;
+            }
+            return items;
+        }
     }
 }
