@@ -32,13 +32,9 @@ namespace API_test.Tests
         public void AllPageSizesShouldWorkAsExpected(int pageSize)
         {
             var response = restHelper.GetQuery(RequestSpec.Query, RequestSpec.PageSizeParameter, pageSize.ToString());
+            Assert.AreEqual(HttpStatusCode.OK, response.StatusCode, "Got unexpected status code");
             var itemsList = response.Content.SelectToken("items").ToObject<List<ItemDto>>();
-            Assert.Multiple(() =>
-            {
-                Assert.AreEqual(HttpStatusCode.OK, response.StatusCode, "Got unexpected status code");
-                Assert.AreEqual(pageSize, itemsList.Count, "Got unexpected page size");
-            });
-
+            Assert.AreEqual(pageSize, itemsList.Count, "Got unexpected page size");
         }
 
         [Test]
@@ -46,12 +42,9 @@ namespace API_test.Tests
         {
             const string expectedErrorMessage = "Параметр 'page_size' должен быть целым числом";
             var response = restHelper.GetQuery(RequestSpec.Query, RequestSpec.PageSizeParameter, "r");
+            Assert.AreEqual(HttpStatusCode.OK, response.StatusCode, "Got unexpected status code");
             var error = response.Content.SelectToken("error").ToObject<ErrorDto>();
-            Assert.Multiple(() =>
-            {
-                Assert.AreEqual(HttpStatusCode.OK, response.StatusCode, "Got unexpected status code");
-                Assert.AreEqual(expectedErrorMessage.Normalize(), error.Message.Normalize(), "Got unexpected error message");
-            });
+            Assert.AreEqual(expectedErrorMessage.Normalize(), error.Message.Normalize(), "Got unexpected error message");
         }
 
         [Test]
@@ -60,12 +53,9 @@ namespace API_test.Tests
             const string expectedErrorMessage = "Параметр 'page_size' может быть одним из следующих значений: 5, 10, 15";
             const string invalidPageSize = "4";
             var response = restHelper.GetQuery(RequestSpec.Query, RequestSpec.PageSizeParameter, invalidPageSize);
+            Assert.AreEqual(HttpStatusCode.OK, response.StatusCode, "Got unexpected status code");
             var error = response.Content.SelectToken("error").ToObject<ErrorDto>();
-            Assert.Multiple(() =>
-            {
-                Assert.AreEqual(HttpStatusCode.OK, response.StatusCode, "Got unexpected status code");
-                Assert.AreEqual(expectedErrorMessage.Normalize(), error.Message.Normalize(), "Got unexpected error message");
-            });
+            Assert.AreEqual(expectedErrorMessage.Normalize(), error.Message.Normalize(), "Got unexpected error message");
         }
     }
 }
