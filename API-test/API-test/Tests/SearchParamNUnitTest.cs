@@ -76,6 +76,7 @@ namespace API_test.Tests
         {
             const string searchParam = "EgrnIxHeaHAkOWPavYbgmhQRxYsLrra";
             const string expectedErrorMessage = "Параметр 'q' должен быть не более 30 символов";
+
             var response = restHelper.GetQuery(RequestSpec.Query, RequestSpec.SearchParameter, searchParam);
             Assert.AreEqual(HttpStatusCode.OK, response.StatusCode, "Got unexpected status code");
             var error = response.Content.SelectToken("error").ToObject<ErrorDto>();

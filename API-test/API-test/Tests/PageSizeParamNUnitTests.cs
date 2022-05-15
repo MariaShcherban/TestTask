@@ -21,6 +21,7 @@ namespace API_test.Tests
         public void DefaultPageSizeShouldBeCorrect()
         {
             const int defaultPageSize = 15;
+
             var response = restHelper.GetQuery(RequestSpec.Query);
             var itemsList = response.Content.SelectToken("items").ToObject<List<ItemDto>>();
             Assert.AreEqual(defaultPageSize, itemsList.Count, "Got unexpected default page size");
@@ -41,7 +42,9 @@ namespace API_test.Tests
         public void WrongTypeOfPageSizeParameterShouldBeHandled()
         {
             const string expectedErrorMessage = "Параметр 'page_size' должен быть целым числом";
-            var response = restHelper.GetQuery(RequestSpec.Query, RequestSpec.PageSizeParameter, "r");
+            const string charPageSize = "r";
+
+            var response = restHelper.GetQuery(RequestSpec.Query, RequestSpec.PageSizeParameter, charPageSize);
             Assert.AreEqual(HttpStatusCode.OK, response.StatusCode, "Got unexpected status code");
             var error = response.Content.SelectToken("error").ToObject<ErrorDto>();
             Assert.AreEqual(expectedErrorMessage.Normalize(), error.Message.Normalize(), "Got unexpected error message");
@@ -52,6 +55,7 @@ namespace API_test.Tests
         {
             const string expectedErrorMessage = "Параметр 'page_size' может быть одним из следующих значений: 5, 10, 15";
             const string invalidPageSize = "4";
+
             var response = restHelper.GetQuery(RequestSpec.Query, RequestSpec.PageSizeParameter, invalidPageSize);
             Assert.AreEqual(HttpStatusCode.OK, response.StatusCode, "Got unexpected status code");
             var error = response.Content.SelectToken("error").ToObject<ErrorDto>();

@@ -36,6 +36,7 @@ namespace API_test.Tests
         {
             const string wrongCountryCode = "www";
             const string expectedErrorMessage = "Параметр 'country_code' может быть одним из следующих значений: ru, kg, kz, cz";
+
             var response = restHelper.GetQuery(RequestSpec.Query, RequestSpec.CountryCodeParameter, wrongCountryCode);
             Assert.AreEqual(HttpStatusCode.OK, response.StatusCode, "Got unexpected status code");
             var error = response.Content.SelectToken("error").ToObject<ErrorDto>();
