@@ -61,10 +61,22 @@ namespace API_test.Tests
         }
 
         [Test]
+        public void EmptySearchParamShouldBeHandled()
+        {
+            const string expectedErrorMessage = "Параметр 'q' должен быть не менее 3 символов";
+
+            var response = restHelper.GetQuery(RequestSpec.Query, RequestSpec.SearchParameter, "");
+            Assert.AreEqual(HttpStatusCode.OK, response.StatusCode, "Got unexpected status code");
+            var error = response.Content.SelectToken("error").ToObject<ErrorDto>();
+            Assert.AreEqual(expectedErrorMessage.Normalize(), error.Message.Normalize(), "Got unexpected error message");
+        }
+
+        [Test]
         public void SearchWithLessThanThreeSymbolsShouldBeHandled()
         {
             const string searchParam = "уу";
             const string expectedErrorMessage = "Параметр 'q' должен быть не менее 3 символов";
+
             var response = restHelper.GetQuery(RequestSpec.Query, RequestSpec.SearchParameter, searchParam);
             Assert.AreEqual(HttpStatusCode.OK, response.StatusCode, "Got unexpected status code");
             var error = response.Content.SelectToken("error").ToObject<ErrorDto>();
