@@ -1,6 +1,7 @@
 ﻿using API_test.ApiResponseModels;
 using API_test.Helpers;
 using API_test.RequestSpecs;
+using FluentAssertions;
 using NUnit.Framework;
 using System.Collections.Generic;
 using System.Net;
@@ -27,6 +28,20 @@ namespace API_test.Tests
             {
                 Assert.That(item.Name.Normalize(), Contains.Substring(searchParam.Normalize()), "Got incorrectly filtered item in search results");
             }
+        }
+
+        [Test]
+        public void RegionSearchShouldBeCaseInsensitive()
+        {
+            const string lowerCaseParam = "рск";
+            var response = restHelper.GetQuery(RequestSpec.Query, RequestSpec.SearchParameter, lowerCaseParam);
+            List<ItemDto> lowerCaseItems = response.Content.SelectToken("items").ToObject<List<ItemDto>>();
+
+            const string mixedCaseParam = "рСК";
+            response = restHelper.GetQuery(RequestSpec.Query, RequestSpec.SearchParameter, mixedCaseParam);
+            List<ItemDto> mixedCaseItems = response.Content.SelectToken("items").ToObject<List<ItemDto>>();
+
+            lowerCaseItems.Should().BeEquivalentTo(mixedCaseItems);
         }
 
         [Test]
