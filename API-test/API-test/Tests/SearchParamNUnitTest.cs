@@ -45,6 +45,22 @@ namespace API_test.Tests
         }
 
         [Test]
+        public void TheRestParamsShouldBeIgnoredIfRegionIsSet()
+        {
+            const string searchParam = "рск";
+            var response = restHelper.GetQuery(RequestSpec.Query, RequestSpec.SearchParameter, searchParam);
+            List<ItemDto> itemsWithSearchParam = response.Content.SelectToken("items").ToObject<List<ItemDto>>();
+
+            const string countryCode = "cz";
+            const string pageNumber = "2";
+            const string pageSize = "10";
+            response = restHelper.GetQuery(RequestSpec.Query, RequestSpec.AllParams(searchParam, countryCode, pageNumber, pageSize));
+            List<ItemDto> itemsWithAllParams = response.Content.SelectToken("items").ToObject<List<ItemDto>>();
+
+            itemsWithSearchParam.Should().BeEquivalentTo(itemsWithAllParams);
+        }
+
+        [Test]
         public void SearchWithLessThanThreeSymbolsShouldBeHandled()
         {
             const string searchParam = "уу";

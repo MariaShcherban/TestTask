@@ -18,7 +18,7 @@ namespace API_test.RequestSpecs
         public static string PageNumberParameter => pageNumberParameter;
         public static string PageSizeParameter => pageSizeParameter;
 
-        public static Dictionary<string, string> Params(string region, string countryCode, string pageNumber, string pageSize)
+        public static Dictionary<string, string> AllParams(string region, string countryCode, string pageNumber, string pageSize)
         {
             return new Dictionary<string, string>()
             {
